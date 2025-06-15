@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLOF Impact Prediction</title>
+    <script>
+        async function predictImpact() {
+            let formData = {
+                "Lat_lake": parseFloat(document.getElementById("Lat_lake").value),
+                "Lon_lake": parseFloat(document.getElementById("Lon_lake").value),
+                "Elev_lake": parseFloat(document.getElementById("Elev_lake").value),
+                "Driver_lake": document.getElementById("Driver_lake").value,
+                "Driver_GLOF": document.getElementById("Driver_GLOF").value,
+                "Mechanism": document.getElementById("Mechanism").value,
+                "Impact_type": document.getElementById("Impact_type").value,
+                "Repeat": document.getElementById("Repeat").value,
+                "Region_RGI": document.getElementById("Region_RGI").value
+            };
+
+            let response = await fetch("http://127.0.0.1:5000/predict", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            });
+
+            let result = await response.json();
+            document.getElementById("result").innerText = "Predicted Impact: " + result.prediction;
+        }
+    </script>
+</head>
+<body>
+    <h1>GLOF Impact Prediction</h1>
+    <label>Latitude: <input type="text" id="Lat_lake"></label><br>
+    <label>Longitude: <input type="text" id="Lon_lake"></label><br>
+    <label>Elevation: <input type="text" id="Elev_lake"></label><br>
+    <label>Driver Lake: <input type="text" id="Driver_lake"></label><br>
+    <label>Driver GLOF: <input type="text" id="Driver_GLOF"></label><br>
+    <label>Mechanism: <input type="text" id="Mechanism"></label><br>
+    <label>Impact Type: <input type="text" id="Impact_type"></label><br>
+    <label>Repeat Event: <input type="text" id="Repeat"></label><br>
+    <label>Region RGI: <input type="text" id="Region_RGI"></label><br>
+
+    <button onclick="predictImpact()">Predict</button>
+
+    <h2 id="result"></h2>
+</body>
+</html>
